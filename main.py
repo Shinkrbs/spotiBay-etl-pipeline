@@ -18,3 +18,7 @@ extractor = Extract()
 top_tracks = extractor.get_user_top_tracks(1)
 print(type(top_tracks))
 print(json.dumps(top_tracks, indent=5))
+
+top_artists = extractor.get_user_top_artists(1)
+print(type(top_artists))
+print(json.dumps(top_artists, indent=5))
