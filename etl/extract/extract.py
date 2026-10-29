@@ -29,3 +29,18 @@ class Extract:
         except Exception as e:
             print(f"Failed fetching profile: {e}")
             raise
+
+    def get_user_recently_played(self, limit: int=50):
+        """
+        Get user recently played tracks
+
+        Args:
+        limit = optional parameter with maximum value of int 50, maximum number of items to retrieve
+        """
+        try:
+            print("Retrieving Recently Played Tracks.")
+            recently_played = self.client.current_user_recently_played(limit=limit)
+            return recently_played
+        except Exception as e:
+            print(f"Failed to retrieve recently played tracks: {e}")
+            raise
