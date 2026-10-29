@@ -44,3 +44,33 @@ class Extract:
         except Exception as e:
             print(f"Failed to retrieve recently played tracks: {e}")
             raise
+
+    def get_user_top_tracks(self, limit: int=50, range: str="short_term"):
+        """
+        Get user top tracks
+        
+        Args:
+        limit = optional parameter with maximum value of int 50, maximum number of items to retrieve
+        range = optional parameter with values "short_term", "medium_term", or "long_term"
+        """
+        try:
+            print("Retrieving User Top Tracks")
+            return self.client.current_user_top_tracks(limit=limit, time_range=range)
+        except Exception as e:
+            print(f"Failed to retrieve top tracks: {e}")
+            raise
+
+    def get_user_top_artists(self, limit: int=50, range: str="short_term"):
+        """
+        Get user top artists
+
+        Args:
+        limit = optional parameter with maximum value of int 50, maximum number of items to retrieve
+        range = optional parameter with values "short_term", "medium_term", or "long_term"
+        """
+        try:
+            print("Retrieving User Top Artists")
+            return self.client.current_user_top_artists(limit=limit, time_range=range)
+        except Exception as e:
+            print(f"Failed to retrieve top artists: {e}")
+            raise
