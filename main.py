@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from etl.extract.extract import Extract
-
+import json
 load_dotenv()
 
 extractor = Extract()
@@ -11,9 +11,10 @@ extractor = Extract()
 #print(user)
 
 # Test Recently Played Tracks Funck
-recent = extractor.get_user_recently_played(10)
-print(type(recent))
+# recent = extractor.get_user_recently_played(10)
+#print(type(recent))
 
-for item in recent.get('items', []):
-    song_name = item['track']['name']
-    print(song_name)
+
+top_tracks = extractor.get_user_top_tracks(1)
+print(type(top_tracks))
+print(json.dumps(top_tracks, indent=5))
