@@ -36,8 +36,33 @@ class Transform:
                 'artist_id': artist[0].get('id') if artist else "N/A",
                 'artist_name': artist[0].get('name') if artist else 'Unknown Artist',
                 'album_name': album.get('name'),
-                'duration_ms': duration,
+                'duration_seconds': round(duration / 1000, 2),
                 'duration_minutes': round(duration / (1000 * 60), 2),
             })
         return pd.DataFrame(records)
+
+    def top_tracks(self, raw_data) -> pd.DataFrame:
+        """
+        Flatten and extract data from user top_tracks and adds ranking
+        """
+        records = []
+        for rank, track in enumerate(raw_data.get('items'), start=1):
+            album = track.get('album')
+            artist = track.get('artists')
+
+            records.append({
+                'rank': rank,
+                'track_id': track.get('id'),
+                'track_name': track.get('name'),
+                'album_id': album.get('id'),
+                'album_name': album.get('name'),
+                'track_number_on_album': track.get('track_number'),
+                'artist_id': artist[0].get('id'),
+                'artist_name': artist[0].get('name')
+
+            })
+        return pd.DataFrame(records)
+
+    def top_artists(self, raw_data)-> pd.DataFrame:
+        pass
 
