@@ -64,5 +64,14 @@ class Transform:
         return pd.DataFrame(records)
 
     def top_artists(self, raw_data)-> pd.DataFrame:
-        pass
-
+        """
+        Flatten and extract data from user top artists and adds ranking
+        """
+        records = []
+        for rank, artists in enumerate(raw_data.get('items'), start=1):
+            records.append({
+                'rank': rank,
+                'artist_id': artists.get('id'),
+                'artist_name': artists.get('name')
+            })
+        return pd.DataFrame(records)
