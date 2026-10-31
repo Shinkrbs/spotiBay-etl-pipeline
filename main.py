@@ -21,18 +21,18 @@ pd.set_option('display.width', 1000)
 #print(transformed_user)
 
 # Test Recently Played Tracks Funck
-#recent = extractor.get_user_recently_played(10)
-#print(type(recent))
+recent = extractor.get_user_recently_played(10)
+print(type(recent))
 #print(json.dumps(recent, indent=5))
-#transformed_recent = transformer.recently_played(recent)
-#print(transformed_recent)
+transformed_recent = transformer.recently_played(recent)
+print(transformed_recent)
 
 
-#top_tracks = extractor.get_user_top_tracks(10)
-#print(type(top_tracks))
+top_tracks = extractor.get_user_top_tracks(10)
+print(type(top_tracks))
 #print(json.dumps(top_tracks, indent=5))
-#transformed_top_tracks = transformer.top_tracks(top_tracks)
-#print(transformed_top_tracks)
+transformed_top_tracks = transformer.top_tracks(top_tracks)
+print(transformed_top_tracks)
 
 top_artists = extractor.get_user_top_artists(50)
 print(type(top_artists))
