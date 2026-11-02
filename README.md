@@ -1,44 +1,40 @@
 # spotiBay ETL Pipeline
 
-**spotiBay ETL Pipeline** is an automated, Object-Oriented Data Engineering pipeline designed to extract personal Spotify listening data, transform nested JSON payloads into normalized relational models, and load them into a serverless PostgreSQL database hosted on **Neon**.
+**spotiBay ETL Pipeline** is an automated, object-oriented data engineering pipeline that extracts personal Spotify listening data, transforms nested JSON into normalized records, and loads it into a PostgreSQL database hosted on **Supabase**.
 
-## 📁 Repository Structure
+## Repository Structure
 
-The project follows a modular, Object-Oriented Programming (OOP) design pattern to isolate data flow stages:
-
-```
+```text
 spotiBay-etl-pipeline/
 ├── etl/
-│   ├── __init__.py
 │   ├── extract/
 │   │   ├── __init__.py
-│   │   └── extract.py         # Handles Spotify OAuth & Web API requests
-│   ├── transform/
+│   │   └── extract.py         # Spotify OAuth and Web API requests
+│   ├── transfrom/
 │   │   ├── __init__.py
-│   │   └── transform.py       # Data cleaning, flattening, and metric calculation
+│   │   └── transform.py       # Data cleaning and flattening
 │   └── load/
 │       ├── __init__.py
-│       └── load.py            # Neon Postgres database operations (SQLAlchemy/psycopg2)
+│       └── load.py            # Supabase database operations
 ├── .env.example
 ├── .gitignore
-├── main.py                    # Entry point for pipeline execution
-├── requirements.txt
+├── main.py                    # Pipeline entry point
 └── README.md
 ```
 
-## ⚙️ Environment & Security Setup
+## Environment and Security Setup
 
-### 1. Prerequisites
+### Prerequisites
 
-Ensure you have Python 3.10+ installed along with the required dependencies:
+Use Python 3.10 or newer and install the required dependencies:
 
 ```bash
-pip install spotipy pandas psycopg2-binary sqlalchemy python-dotenv
+pip install spotipy pandas supabase python-dotenv
 ```
 
-### 2. Environment Variables (`.env`)
+### Environment Variables
 
-Create a `.env` file in the root directory. **Never commit this file to source control.**
+Create a `.env` file in the repository root. Never commit this file to source control.
 
 ```env
 # Spotify API Configuration
@@ -46,20 +42,32 @@ SPOTIPY_CLIENT_ID="your_spotify_client_id"
 SPOTIPY_CLIENT_SECRET="your_spotify_client_secret"
 SPOTIPY_REDIRECT_URI="http://127.0.0.1:8080"
 
-# Neon PostgreSQL Database Configuration
-NEON_DATABASE_URL="postgresql://user:password@ep-cool-name-123456.us-east-2.aws.neon.tech/neondb?sslmode=require"
+# Supabase Configuration
+SUPABASE_URL="https://your-project-id.supabase.co"
+SUPABASE_SERVICE_KEY="your-supabase-service-role-key"
 ```
 
-> **Note on Redirect URI:** Ensure `http://127.0.0.1:8080` is added to your application's Redirect URIs in the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard). Do not use `localhost` or IPv6 notation `[::1]` due to strict dashboard validation and library URL parsing limits.
+The `SUPABASE_SERVICE_KEY` is a server-side secret with elevated permissions. Keep it in `.env`, ensure `.env` is ignored by Git, and never expose it in client-side code.
 
-## 🛠️ Extraction Module Reference (`etl.extract.Extract`)
+Ensure `http://127.0.0.1:8080` is registered as an allowed Redirect URI in the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
 
-The `Extract` class encapsulates Spotify Web API interactions using `spotipy.oauth2.SpotifyOAuth`.
+## Running the Pipeline
 
-### OAuth Scopes Required
+After configuring Spotify and Supabase credentials, run the entry point from the repository root:
 
-* `user-top-read` — Access user's top artists and tracks.
-* `user-read-recently-played` — Access recently played items.
-* `user-read-email` — Identify user profile email.
-* `user-read-private` — Access user subscription details and profile attributes.
+```bash
+python main.py
+```
 
+The loader uses Supabase `upsert` operations to write transformed records to the target tables, including `user_profile`.
+
+## Extraction Module Reference
+
+The `Extract` class uses `spotipy.oauth2.SpotifyOAuth` to access the Spotify Web API.
+
+### Required OAuth Scopes
+
+* `user-top-read` - Access the user's top artists and tracks.
+* `user-read-recently-played` - Access recently played items.
+* `user-read-email` - Access the user's email.
+* `user-read-private` - Access private profile information.
