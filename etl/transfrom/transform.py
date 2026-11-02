@@ -7,15 +7,15 @@ class Transform:
     def __init__(self):
         self.user_keys = ["display_name", "email", "country", "id"]
 
-    def user_profile(self, raw_data) -> pd.DataFrame:
+    def user_profile(self, raw_data) -> list[dict]:
         """
         Flatten and Extract important data from current user 
         and transfrom it into a dataframe.
         """
         filtered_user = {key: raw_data[key] for key in self.user_keys if key in raw_data}
-        return pd.DataFrame([filtered_user])
+        return [filtered_user]
        
-    def recently_played(self, raw_data) -> pd.DataFrame:
+    def recently_played(self, raw_data) -> list[dict]:
         """
         Flatten raw recently played tracks JSON, parses timestamps, and 
         converts duration_ms into minutes per track.
@@ -28,8 +28,8 @@ class Transform:
             artist = track.get('artists')
 
             records.append({
-                'played_at': pd.to_datetime(item.get('played_at')),
-                'played_date': pd.to_datetime(item.get('played_at')).date(),               
+                'played_at': str(pd.to_datetime(item.get('played_at'))),
+                'played_date': str(pd.to_datetime(item.get('played_at')).date()),               
                 'played_time': pd.to_datetime(item.get('played_at')).strftime('%H:%M:%S'),
                 'track_id': track.get('id'),
                 'track_name': track.get('name'),
@@ -40,9 +40,9 @@ class Transform:
                 'duration_seconds': round(duration / 1000, 2),
                 'duration_minutes': round(duration / (1000 * 60), 2),
             })
-        return pd.DataFrame(records)
+        return records
 
-    def top_tracks(self, raw_data) -> pd.DataFrame:
+    def top_tracks(self, raw_data) -> list[dict]:
         """
         Flatten and extract data from user top_tracks and adds ranking
         """
@@ -62,9 +62,9 @@ class Transform:
                 'artist_name': artist[0].get('name') if artist else "Unknown Artist"
 
             })
-        return pd.DataFrame(records)
+        return records
 
-    def top_artists(self, raw_data)-> pd.DataFrame:
+    def top_artists(self, raw_data)-> list[dict]:
         """
         Flatten and extract data from user top artists and adds ranking
         """
@@ -75,4 +75,4 @@ class Transform:
                 'artist_id': artists.get('id'),
                 'artist_name': artists.get('name')
             })
-        return pd.DataFrame(records)
+        return records
