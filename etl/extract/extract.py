@@ -74,3 +74,6 @@ class Extract:
         except Exception as e:
             print(f"Failed to retrieve top artists: {e}")
             raise
+
+
+# This is an example change for github actions
